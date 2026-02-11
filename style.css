@@ -269,7 +269,7 @@ body {
     width: 70%;
     height: 70%;
     object-fit: cover;
-    object-position: top center;
+    object-position: center 20%;
 }
 
 .avatar-placeholder i {
