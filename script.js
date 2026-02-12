@@ -1,5 +1,5 @@
 // Inicialización de iconos Lucide
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     lucide.createIcons();
 });
 
@@ -8,9 +8,9 @@ const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('nav-menu');
 
 if (navToggle && navMenu) {
-    navToggle.addEventListener('click', function() {
+    navToggle.addEventListener('click', function () {
         navMenu.classList.toggle('show');
-        
+
         // Cambiar icono del toggle
         const icon = navToggle.querySelector('i');
         if (navMenu.classList.contains('show')) {
@@ -43,7 +43,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         if (target) {
             const headerHeight = document.querySelector('.header').offsetHeight;
             const targetPosition = target.offsetTop - headerHeight;
-            
+
             window.scrollTo({
                 top: targetPosition,
                 behavior: 'smooth'
@@ -53,22 +53,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Destacar enlace activo en la navegación
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     let current = '';
     const scrollPosition = window.scrollY + 100;
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
-        
+
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
             current = section.getAttribute('id');
         }
     });
-    
+
     navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
@@ -83,7 +83,7 @@ const observerOptions = {
     rootMargin: '0px 0px -50px 0px'
 };
 
-const observer = new IntersectionObserver(function(entries) {
+const observer = new IntersectionObserver(function (entries) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
@@ -97,31 +97,7 @@ document.querySelectorAll('.skill-card, .project-card, .blog-card, .about-card')
 });
 
 // Formulario de contacto
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Obtener datos del formulario
-        const formData = new FormData(contactForm);
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const subject = formData.get('subject');
-        const message = formData.get('message');
-        
-        // Crear enlace mailto
-        const mailtoLink = `mailto:rtrinidadac25@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`)}`;
-        
-        // Abrir cliente de correo
-        window.location.href = mailtoLink;
-        
-        // Mostrar mensaje de confirmación
-        showNotification('¡Gracias por tu mensaje! Se abrirá tu cliente de correo para enviar el mensaje.', 'success');
-        
-        // Limpiar formulario
-        contactForm.reset();
-    });
-}
+/* Removed contact form listener */
 
 // Función para mostrar notificaciones
 function showNotification(message, type = 'info') {
@@ -129,7 +105,7 @@ function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
-    
+
     // Estilos de la notificación
     notification.style.cssText = `
         position: fixed;
@@ -146,15 +122,15 @@ function showNotification(message, type = 'info') {
         max-width: 300px;
         word-wrap: break-word;
     `;
-    
+
     // Añadir al DOM
     document.body.appendChild(notification);
-    
+
     // Mostrar notificación
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
-    
+
     // Ocultar y eliminar notificación
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
@@ -167,7 +143,7 @@ function showNotification(message, type = 'info') {
 }
 
 // Efecto parallax sutil en el hero
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
     const scrolled = window.pageYOffset;
     const hero = document.querySelector('.hero');
     if (hero) {
@@ -180,11 +156,11 @@ window.addEventListener('scroll', function() {
 function animateCounter(element, target, duration = 2000) {
     let start = 0;
     const increment = target / (duration / 16);
-    
+
     const timer = setInterval(() => {
         start += increment;
         element.textContent = Math.floor(start);
-        
+
         if (start >= target) {
             element.textContent = target;
             clearInterval(timer);
@@ -220,68 +196,7 @@ if (savedTheme === 'dark') {
     document.body.classList.add('dark-theme');
 }
 
-// Validación de formulario en tiempo real
-const formInputs = document.querySelectorAll('#contact-form input, #contact-form textarea');
-formInputs.forEach(input => {
-    input.addEventListener('blur', function() {
-        validateField(this);
-    });
-    
-    input.addEventListener('input', function() {
-        if (this.classList.contains('error')) {
-            validateField(this);
-        }
-    });
-});
-
-function validateField(field) {
-    const value = field.value.trim();
-    let isValid = true;
-    let errorMessage = '';
-    
-    // Eliminar mensajes de error previos
-    const existingError = field.parentNode.querySelector('.error-message');
-    if (existingError) {
-        existingError.remove();
-    }
-    
-    // Validaciones específicas
-    switch (field.type) {
-        case 'email':
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (value && !emailRegex.test(value)) {
-                isValid = false;
-                errorMessage = 'Por favor, introduce un email válido';
-            }
-            break;
-        case 'text':
-            if (field.required && !value) {
-                isValid = false;
-                errorMessage = 'Este campo es obligatorio';
-            }
-            break;
-        case 'textarea':
-            if (field.required && !value) {
-                isValid = false;
-                errorMessage = 'Este campo es obligatorio';
-            }
-            break;
-    }
-    
-    // Aplicar estilos de error
-    if (!isValid) {
-        field.classList.add('error');
-        const errorElement = document.createElement('span');
-        errorElement.className = 'error-message';
-        errorElement.textContent = errorMessage;
-        errorElement.style.cssText = 'color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem; display: block;';
-        field.parentNode.appendChild(errorElement);
-    } else {
-        field.classList.remove('error');
-    }
-    
-    return isValid;
-}
+/* Removed validation functions */
 
 // Añadir estilos CSS para animaciones y estados
 const style = document.createElement('style');
@@ -322,11 +237,7 @@ style.textContent = `
         }
     }
     
-    .form-group input.error,
-    .form-group textarea.error {
-        border-color: #ef4444;
-        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
+/* Removed error styles */
     
     .lazy {
         opacity: 0;
